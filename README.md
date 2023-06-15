@@ -10,7 +10,7 @@ cd /mnt/c/Users/Kevin/Documents/GitHub/I2P2mini3app
 make main
 ```
 
-* TO execute
+* To execute
 ```
-.\build\main.exe .\build\player_random.exe .\build\player_random.exe
+./build/main ./build/player_random /build/player_random
 ```
