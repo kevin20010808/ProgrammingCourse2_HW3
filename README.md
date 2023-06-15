@@ -12,5 +12,5 @@ make main
 
 * To execute
 ```
-./build/main ./build/player_random /build/player_random
+./build/main ./build/player_random ./build/player_random
 ```
