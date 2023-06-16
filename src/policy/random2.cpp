@@ -1,6 +1,6 @@
 #include <cstdlib>
-#include <queue>
-
+#include <iostream>
+#include <fstream>
 #include "../state/state.hpp"
 #include "./random2.hpp"
 
@@ -12,37 +12,46 @@
  * @param depth You may need this for other policy
  * @return Move 
  */
-Move Random2::get_move(State *state, int depth){
-  if(!state->legal_actions.size())
-    state->get_legal_actions();
-  
-  auto actions = state->legal_actions;
-  Move _move;
-  int alpha_score = -INT_MAX;
-  //int beta_score = INT_MAX;
-  std::queue<Move> q;
-  for(Move m: actions) q.push(m);
-  
-  
-  while(!q.empty()){
-    Move act  = q.front();
-    q.pop();
-    State* next = state->next_state(act);
-    next->evaluate();
-    if(next->score[next->player]>alpha_score){
-      alpha_score = next->score[next->player];
-      _move = act;
-      //next->get_legal_actions();
-      //for(Move m: next->legal_actions) q.push(m);
-      
-    }
+Move Random2::get_move(State* state, int depth){
+  minimax(state, depth, state->player,-INT_MAX, INT_MAX);
+  return state->move;
+}
 
+
+int minimax(State* s, int depth, int player, int alpha, int beta){
+  if(depth==0){
+    return s->evaluate();
   }
-  
-  return _move;
-  
-  //int k=depth;
-  // for(int i=0;i<depth;i++) k=rand()/k;
-  //return actions[k%actions.size()];
-  //return actions[(rand()+depth)%actions.size()];
+  State* next;
+  if(player){
+    if(!s->legal_actions.size()) s->get_legal_actions();
+    auto actions = s->legal_actions;
+    for(Move m: actions){
+      next = s->next_state(m);
+      next->move = m;
+      int vt = minimax(next, depth-1, 0, alpha, beta);
+      if(vt>alpha){
+        alpha = vt;
+        if(depth==6)
+          s->move = next->move;
+      }
+      if(alpha >= beta) break;
+    }
+    return alpha;
+  }else{
+    if(!s->legal_actions.size()) s->get_legal_actions();
+    auto actions = s->legal_actions;
+    for(Move m: actions){
+      next = s->next_state(m);
+      next->move = m;
+      int vt = minimax(next, depth-1, 1, alpha, beta);   
+      if(vt<beta){
+        beta = vt;
+        if(depth==6)
+          s->move = next->move;
+      }
+      if(alpha >= beta) break;
+    }
+    return beta;
+  }
 }
