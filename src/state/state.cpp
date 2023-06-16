@@ -13,7 +13,37 @@
  */
 int State::evaluate(){
   // [TODO] design your own evaluation function
-  return 0;
+  auto self_board = this->board.board[this->player];
+  int now_piece;
+  for(int i=0; i<BOARD_H; i+=1){
+    for(int j=0; j<BOARD_W; j+=1){
+      if((now_piece=self_board[i][j])){
+          int cur_score=0;
+          switch (now_piece){
+            case 1:
+              cur_score = 2;
+              break;
+            case 2:
+              cur_score = 6;
+              break;
+            case 3:
+              cur_score = 7;
+              break;
+            case 4:
+              cur_score = 8;
+              break;
+            case 5:
+              cur_score = 20;
+              break;
+            case 6:
+              break;
+          }
+          this->score[this->player]+=cur_score;
+      }
+    }
+  }
+
+  return this->score[this->player];
 }
 
 
