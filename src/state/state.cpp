@@ -80,7 +80,7 @@ int State::evaluate(int player){
           }
         }
       }
-    return cur_score/100;
+    return cur_score+weight;
 }
 
 
