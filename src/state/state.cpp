@@ -21,28 +21,30 @@ int State::evaluate(int player){
       int now_piece;
       int weight=0;
       int cur_score=0;
+
+
       for(int i=0; i<BOARD_H; i+=1){
         for(int j=0; j<BOARD_W; j+=1){
           if((now_piece=self_board[i][j])){
             switch (now_piece){
               case 1:
-                cur_score += 20;
+                cur_score += 20*3;
                 weight += (player==0)? wPawnTable[i][j]: bPawnTable[i][j];
                 break;
               case 2:
-                cur_score += 60;
+                cur_score += 60*3;
                 weight += (player==0)? wRookTable[i][j]: bRookTable[i][j];
                 break;
               case 3:
-                cur_score += 70;
+                cur_score += 70*3;
                 weight += (player==0)? wKnightTable[i][j]: bKnightTable[i][j];
                 break;
               case 4:
-                cur_score += 80;
+                cur_score += 80*3;
                 weight += (player==0)? wBishopTable[i][j]: bBishopTable[i][j];
                 break;
               case 5:
-                cur_score += 200;
+                cur_score += 200*2;
                 weight += (player==0)? wQueenTable[i][j]: bQueenTable[i][j];
                 break;
               case 6:
@@ -54,23 +56,23 @@ int State::evaluate(int player){
         if((now_piece=opp_board[i][j])){
             switch (now_piece){
               case 1:
-                cur_score -= 20;
+                cur_score -= 20*3;
                 weight -= (player==1)? wPawnTable[i][j]: bPawnTable[i][j];
                 break;
               case 2:
-                cur_score -= 60;
+                cur_score -= 60*3;
                 weight -= (player==1)? wRookTable[i][j]: bRookTable[i][j];
                 break;
               case 3:
-                cur_score -= 70;
+                cur_score -= 70*3;
                 weight -= (player==1)? wKnightTable[i][j]: bKnightTable[i][j];
                 break;
               case 4:
-                cur_score -= 80;
+                cur_score -= 80*3;
                 weight -= (player==1)? wBishopTable[i][j]: bBishopTable[i][j];
                 break;
               case 5:
-                cur_score -= 200;
+                cur_score -= 200*2;
                 weight -= (player==1)? wQueenTable[i][j]: bQueenTable[i][j];
                 break;
               case 6:

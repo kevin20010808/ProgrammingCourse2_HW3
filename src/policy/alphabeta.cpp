@@ -20,9 +20,15 @@ Move Random2::get_move(State* state, int depth){
 
 int minimax(State* s, int depth, bool turn, int alpha, int beta, int player){
   State* next;
-  if(depth==0||s->game_state==WIN||s->game_state==DRAW){
+   if(s->game_state==WIN&&turn) return INT_MAX;
+  if(s->game_state==WIN&&!turn) return -INT_MAX;
+ 
+
+  if(depth==0||s->game_state==DRAW){
     return s->evaluate(player);
   }
+
+
   if(!s->legal_actions.size()) s->get_legal_actions();
   auto actions = s->legal_actions;
   if(turn){
@@ -32,7 +38,7 @@ int minimax(State* s, int depth, bool turn, int alpha, int beta, int player){
       int vt = minimax(next, depth-1, false, alpha, beta, player);
       if(vt>alpha){
         alpha = vt;
-        if(depth==3) s->move = next->move;
+        if(depth==5) s->move = next->move;
       }
       if(alpha >= beta) break;
     }
@@ -44,7 +50,7 @@ int minimax(State* s, int depth, bool turn, int alpha, int beta, int player){
       int vt = minimax(next, depth-1, true, alpha, beta, player);   
       if(vt<beta){
         beta = vt;
-        if(depth==3) s->move = next->move;
+        if(depth==5) s->move = next->move;
       }
       if(alpha >= beta) break;
     }
