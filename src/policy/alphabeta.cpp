@@ -38,7 +38,7 @@ int minimax(State* s, int depth, bool turn, int alpha, int beta, int player){
       int vt = minimax(next, depth-1, false, alpha, beta, player);
       if(vt>alpha){
         alpha = vt;
-        if(depth==5) s->move = next->move;
+        if(depth==3) s->move = next->move;
       }
       if(alpha >= beta) break;
     }
@@ -50,7 +50,7 @@ int minimax(State* s, int depth, bool turn, int alpha, int beta, int player){
       int vt = minimax(next, depth-1, true, alpha, beta, player);   
       if(vt<beta){
         beta = vt;
-        if(depth==5) s->move = next->move;
+        if(depth==3) s->move = next->move;
       }
       if(alpha >= beta) break;
     }

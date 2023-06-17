@@ -32,15 +32,15 @@ int State::evaluate(int player){
                 weight += (player==0)? wPawnTable[i][j]: bPawnTable[i][j];
                 break;
               case 2:
-                cur_score += 60*3;
+                cur_score += 60*2;
                 weight += (player==0)? wRookTable[i][j]: bRookTable[i][j];
                 break;
               case 3:
-                cur_score += 70*3;
+                cur_score += 70*2;
                 weight += (player==0)? wKnightTable[i][j]: bKnightTable[i][j];
                 break;
               case 4:
-                cur_score += 80*3;
+                cur_score += 80*2;
                 weight += (player==0)? wBishopTable[i][j]: bBishopTable[i][j];
                 break;
               case 5:
@@ -60,15 +60,15 @@ int State::evaluate(int player){
                 weight -= (player==1)? wPawnTable[i][j]: bPawnTable[i][j];
                 break;
               case 2:
-                cur_score -= 60*3;
+                cur_score -= 60*2;
                 weight -= (player==1)? wRookTable[i][j]: bRookTable[i][j];
                 break;
               case 3:
-                cur_score -= 70*3;
+                cur_score -= 70*2;
                 weight -= (player==1)? wKnightTable[i][j]: bKnightTable[i][j];
                 break;
               case 4:
-                cur_score -= 80*3;
+                cur_score -= 80*2;
                 weight -= (player==1)? wBishopTable[i][j]: bBishopTable[i][j];
                 break;
               case 5:
