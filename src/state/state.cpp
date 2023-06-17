@@ -25,27 +25,27 @@ int State::evaluate(int player){
           if((now_piece=self_board[i][j])){
             switch (now_piece){
               case 1:
-                cur_score += 200;
+                cur_score += 20;
                 weight += (player==0)? wPawnTable[i][j]: bPawnTable[i][j];
                 break;
               case 2:
-                cur_score += 600;
+                cur_score += 60;
                 weight += (player==0)? wRookTable[i][j]: bRookTable[i][j];
                 break;
               case 3:
-                cur_score += 700;
+                cur_score += 70;
                 weight += (player==0)? wKnightTable[i][j]: bKnightTable[i][j];
                 break;
               case 4:
-                cur_score += 800;
+                cur_score += 80;
                 weight += (player==0)? wBishopTable[i][j]: bBishopTable[i][j];
                 break;
               case 5:
-                cur_score += 2000;
+                cur_score += 200;
                 weight += (player==0)? wQueenTable[i][j]: bQueenTable[i][j];
                 break;
               case 6:
-                cur_score += 1000000;
+                cur_score += 100000;
                 weight += (player==0)? wKingTableMid[i][j]: bKingTableMid[i][j];
                 break;
             }
@@ -53,27 +53,27 @@ int State::evaluate(int player){
         if((now_piece=opp_board[i][j])){
             switch (now_piece){
               case 1:
-                cur_score -= 200;
+                cur_score -= 20;
                 weight -= (player==1)? wPawnTable[i][j]: bPawnTable[i][j];
                 break;
               case 2:
-                cur_score -= 600;
+                cur_score -= 60;
                 weight -= (player==1)? wRookTable[i][j]: bRookTable[i][j];
                 break;
               case 3:
-                cur_score -= 700;
+                cur_score -= 70;
                 weight -= (player==1)? wKnightTable[i][j]: bKnightTable[i][j];
                 break;
               case 4:
-                cur_score -= 800;
+                cur_score -= 80;
                 weight -= (player==1)? wBishopTable[i][j]: bBishopTable[i][j];
                 break;
               case 5:
-                cur_score -= 2000;
+                cur_score -= 200;
                 weight -= (player==1)? wQueenTable[i][j]: bQueenTable[i][j];
                 break;
               case 6:
-                cur_score -= 1000000;
+                cur_score -= 100000;
                 weight -= (player==1)? wKingTableMid[i][j]: bKingTableMid[i][j];
                 break;
             }
@@ -82,7 +82,6 @@ int State::evaluate(int player){
       }
     return cur_score+weight;
 }
-
 
 
 
