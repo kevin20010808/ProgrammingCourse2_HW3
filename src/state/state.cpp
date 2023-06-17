@@ -12,41 +12,62 @@
  * @return int 
  */
 
-int State::evaluate(){
+int State::evaluate(int player){
   // [TODO] design your own evaluation function
-      auto self_board = this->board.board[this->player];
+      auto self_board = this->board.board[player];
+      auto opp_board = this->board.board[1-player];
       int now_piece;
+      int cur_score=0;
       for(int i=0; i<BOARD_H; i+=1){
         for(int j=0; j<BOARD_W; j+=1){
           if((now_piece=self_board[i][j])){
-            int cur_score=0;
             switch (now_piece){
-              case 6:
-                cur_score = 1000;
-                break;
               case 1:
-                cur_score = 10;
+                cur_score += 2;
                 break;
               case 2:
-                cur_score = 20;
+                cur_score += 6;
                 break;
               case 3:
-                cur_score = 30;
+                cur_score += 7;
                 break;
               case 4:
-                cur_score = 50;
+                cur_score += 8;
                 break;
               case 5:
-                cur_score = 100;
+                cur_score += 20;
+                break;
+              case 6:
+                cur_score += 10000;
+                break;
+            }
+        }
+        if((now_piece=opp_board[i][j])){
+            switch (now_piece){
+              case 6:
+                cur_score -= 10000;
+                break;
+              case 1:
+                cur_score -= 2;
+                break;
+              case 2:
+                cur_score -= 6;
+                break;
+              case 3:
+                cur_score -= 7;
+                break;
+              case 4:
+                cur_score -= 8;
+                break;
+              case 5:
+                cur_score -= 20;
                 break;
 
             }
-            this->score[this->player]+=cur_score;
           }
         }
       }
-    return this->score[this->player];
-    //return 10;
+    return cur_score;
 }
 
 
