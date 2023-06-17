@@ -13,6 +13,7 @@
  * @return int 
  */
 
+
 int State::evaluate(int player){
   // [TODO] design your own evaluation function
       auto self_board = this->board.board[player];
@@ -82,6 +83,8 @@ int State::evaluate(int player){
       }
     return cur_score+weight;
 }
+
+
 
 
 
