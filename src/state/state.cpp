@@ -4,7 +4,7 @@
 #define INT_MAX 2147483647
 #include "./state.hpp"
 #include "../config.hpp"
-
+#include "./weight.cpp"
 
 /**
  * @brief evaluate the state
@@ -14,7 +14,7 @@
 bool State::is_game_over(){
   return  this->game_state==WIN||this->game_state==DRAW;
 }
-int State::evaluate(int player){
+double State::evaluate(int player){
   // [TODO] design your own evaluation function
       auto self_board = this->board.board[player];
       auto opp_board = this->board.board[1-player];
