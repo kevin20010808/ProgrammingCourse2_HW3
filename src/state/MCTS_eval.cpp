@@ -26,8 +26,8 @@ MCTS_node::MCTS_node(State* s, MCTS_node* pa){
 }
 
 std::vector<Move> MCTS_node::untried(){
-    if(!this->state->legal_actions.size())
-        this->state->get_legal_actions();
+    //if(!this->state->legal_actions.size()) 
+    this->state->get_legal_actions();
     this->untried_acts = this->state->legal_actions;
     return this->untried_acts;
 };
@@ -40,6 +40,7 @@ MCTS_node* MCTS_node::expand(){
     Move m = this->untried_acts.back();
     this->untried_acts.pop_back();
     State* next = this->state->next_state(m);
+    next->move = m;
     MCTS_node* child = new MCTS_node(next, this);
     this->children.push_back(child);
     return child;
@@ -50,8 +51,8 @@ bool MCTS_node::is_terminal_node(){return this->state->is_game_over();};
 double MCTS_node::rollout(){
     State* cur_rollout_state = this->state;
     while(!cur_rollout_state->is_game_over()){
-        if(!cur_rollout_state->legal_actions.size())
-            cur_rollout_state->get_legal_actions();
+        //if(!cur_rollout_state->legal_actions.size()) 
+        cur_rollout_state->get_legal_actions();
         std::vector<Move> possible_moves = cur_rollout_state->legal_actions;
         Move m = this->rollout_policy(possible_moves);
         cur_rollout_state = cur_rollout_state->next_state(m);
@@ -95,7 +96,7 @@ MCTS_node* MCTS_node::tree_policy(){
 };
 
 MCTS_node* MCTS_node::best_act(){
-    int depth = 100;
+    int depth = 800000;
     for(int i=0;i<depth;i++){
         MCTS_node* v = this->tree_policy();
         double reward = v->rollout();
