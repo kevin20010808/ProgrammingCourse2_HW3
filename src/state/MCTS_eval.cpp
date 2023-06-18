@@ -1,7 +1,29 @@
-#include "./MCTS_eval.hpp"
+
 #include <cmath>
 #include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <cstdint>
+#include "./state.hpp"
+#include "../config.hpp"
+#include "./MCTS_eval.hpp"
+MCTS_node::MCTS_node(State* s){
+    state = s;
+    parent = nullptr;
+    //pa_action; 
+    results[1] = 0;
+    results[-1] = 0;
+    untried_acts = this->untried();
+}
 
+MCTS_node::MCTS_node(State* s, MCTS_node* pa){
+    state = s;
+    parent = pa;
+        //pa_action = pact;
+    results[1] = 0;
+    results[-1] = 0;
+    untried_acts = this->untried();
+}
 
 std::vector<Move> MCTS_node::untried(){
     if(!this->state->legal_actions.size())
@@ -18,7 +40,7 @@ MCTS_node* MCTS_node::expand(){
     Move m = this->untried_acts.back();
     this->untried_acts.pop_back();
     State* next = this->state->next_state(m);
-    MCTS_node* child = new MCTS_node(next, this, m);
+    MCTS_node* child = new MCTS_node(next, this);
     this->children.push_back(child);
     return child;
 };

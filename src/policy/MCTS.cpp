@@ -2,7 +2,8 @@
 
 #include "../state/state.hpp"
 #include "./MCTS.hpp"
-#include "../state/MCTS_eval.hpp"
+//#include "../state/MCTS_eval.hpp"
+#include "../state/MCTS_eval.cpp"
 
 /**
  * @brief Randomly get a legal action
