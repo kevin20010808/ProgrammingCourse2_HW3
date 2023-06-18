@@ -11,8 +11,15 @@
  * 
  * @return int 
  */
+bool State::is_game_over(){
+  return  this->game_state==WIN||this->game_state==DRAW;
+}
 
+<<<<<<< Updated upstream
 int State::evaluate(int player){
+=======
+double State::evaluate(int player){
+>>>>>>> Stashed changes
   // [TODO] design your own evaluation function
       auto self_board = this->board.board[player];
       auto opp_board = this->board.board[1-player];
