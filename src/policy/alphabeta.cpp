@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "../state/state.hpp"
-#include "./random2.hpp"
+#include "./alphabeta.hpp"
 
 #define INT_MAX 2147483647
 /**
@@ -12,7 +12,7 @@
  * @param depth You may need this for other policy
  * @return Move 
  */
-Move Random2::get_move(State* state, int depth){
+Move Alphabeta::get_move(State* state, int depth){
   minimax(state, depth, true, -INT_MAX, INT_MAX, state->player);
   return state->move;
 }
