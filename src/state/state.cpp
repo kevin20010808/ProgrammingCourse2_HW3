@@ -14,7 +14,8 @@
 bool State::is_game_over(){
   return  this->game_state==WIN||this->game_state==DRAW;
 }
-double State::evaluate(int player){
+/*
+int State::evaluate(int player){
   // [TODO] design your own evaluation function
       auto self_board = this->board.board[player];
       auto opp_board = this->board.board[1-player];
@@ -87,7 +88,28 @@ double State::evaluate(int player){
 }
 
 
+*/
 
+static const int material_table[7] = {0, 2, 6, 7, 8, 20, 100};
+int State::evaluate(int self){
+  // [TODO] design your own evaluation function
+  int selfVal = 0, oppnVal = 0, piece, Val=0;
+  // evaluate the current state value
+  auto self_board = this->board.board[self];
+  auto oppn_board = this->board.board[1-self];
+  for(size_t i=0; i<BOARD_H; i+=1){
+    for(size_t j=0; j<BOARD_W; j+=1){
+      if((piece=self_board[i][j])){
+        selfVal += material_table[piece];
+      }
+      if((piece=oppn_board[i][j])){
+        oppnVal += material_table[piece];
+      }
+    } 
+  }
+  Val = selfVal-oppnVal;
+  return Val;
+}
 
 
 /**

@@ -14,6 +14,8 @@
  */
 Move Alphabeta::get_move(State* state, int depth){
   minimax(state, depth, true, -INT_MAX, INT_MAX, state->player);
+  //negamax(state, depth, -INT_MAX);
+  //alphabeta(state, depth, -INT_MAX, INT_MAX, true);
   return state->move;
 }
 
@@ -50,4 +52,61 @@ int minimax(State* s, int depth, bool turn, int alpha, int beta, int player){
     }
     return beta;
   }
+}
+
+int alphabeta(State *state, int depth, int alpha, int beta, bool self){
+
+    if(depth==0){
+        if(self) return state->evaluate(state->player);
+        else return state->evaluate(1-state->player);
+    }
+    State *curS = state;
+    Move nxtMove;
+    // Maximizing
+    if(self){
+        if(!state->legal_actions.size()) state->get_legal_actions();
+        for(auto it: state->legal_actions){
+            int val = alphabeta(curS->next_state(it), depth-1, alpha, beta, false);
+            if(val>alpha){
+                alpha = val;
+                nxtMove = it;
+            }
+            state->move = nxtMove;
+            if(alpha>=beta) break;
+        }
+        return alpha;       
+    }
+    // Minimizing
+    else{
+        if(!state->legal_actions.size()) state->get_legal_actions();
+        for(auto it: state->legal_actions){
+            int val = alphabeta(curS->next_state(it), depth-1, alpha, beta, true);
+            if(val<beta){
+                beta = val;
+                nxtMove = it;
+            }
+            state->move = nxtMove;
+            if(alpha>=beta) break;
+        }
+        return beta; 
+    }
+}
+
+int negamax(State* s, int depth, int gamma){
+  if(depth==0||s->game_state==WIN||s->game_state==DRAW){
+    return s->evaluate(s->player);
+  }
+  if(!s->legal_actions.size()) s->get_legal_actions();
+  auto actions = s->legal_actions;
+  Move nxtMove;
+  for(Move m: actions){
+    nxtMove = m;
+    int vt = -negamax(s->next_state(m), depth-1, gamma);
+    if(vt>gamma){
+       gamma = vt;
+       nxtMove = m;
+    }
+    s->move = nxtMove;
+  }
+  return gamma;
 }
