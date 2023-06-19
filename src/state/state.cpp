@@ -1,10 +1,11 @@
 #include <iostream>
 #include <sstream>
 #include <cstdint>
+#include <algorithm>
 #define INT_MAX 2147483647
 #include "./state.hpp"
 #include "../config.hpp"
-#include "./weight.cpp"
+#include "./weight2.cpp"
 
 /**
  * @brief evaluate the state
@@ -14,81 +15,81 @@
 bool State::is_game_over(){
   return  this->game_state==WIN||this->game_state==DRAW;
 }
-/*
-int State::evaluate(int player){
+double State::evaluate(int player){
   // [TODO] design your own evaluation function
       auto self_board = this->board.board[player];
       auto opp_board = this->board.board[1-player];
       int now_piece;
-      int weight=0;
-      int cur_score=0;
-
-
+      
+      double cur_score=0;
       for(int i=0; i<BOARD_H; i+=1){
         for(int j=0; j<BOARD_W; j+=1){
           if((now_piece=self_board[i][j])){
+            double weight=1;
             switch (now_piece){
               case 1:
-                cur_score += 20*3;
-                weight += (player==0)? wPawnTable[i][j]: bPawnTable[i][j];
+                weight *= (player==0)? wPawnTable[i][j]: bPawnTable[i][j];
+                cur_score += 120*weight;
                 break;
               case 2:
-                cur_score += 60*2;
-                weight += (player==0)? wRookTable[i][j]: bRookTable[i][j];
+                weight *= (player==0)? wRookTable[i][j]: bRookTable[i][j];
+                cur_score += 200*weight;
                 break;
               case 3:
-                cur_score += 70*2;
-                weight += (player==0)? wKnightTable[i][j]: bKnightTable[i][j];
+                weight *= (player==0)? wKnightTable[i][j]: bKnightTable[i][j];
+                cur_score += 230*weight;
                 break;
               case 4:
-                cur_score += 80*2;
-                weight += (player==0)? wBishopTable[i][j]: bBishopTable[i][j];
+                weight *= (player==0)? wBishopTable[i][j]: bBishopTable[i][j];
+                cur_score += 250*weight;
                 break;
               case 5:
-                cur_score += 200*2;
-                weight += (player==0)? wQueenTable[i][j]: bQueenTable[i][j];
+                weight *= (player==0)? wQueenTable[i][j]: bQueenTable[i][j];
+                cur_score += 700*weight;
                 break;
               case 6:
-                cur_score += 100000;
-                weight += (player==0)? wKingTableMid[i][j]: bKingTableMid[i][j];
+                weight *= (player==0)? wKingTableMid[i][j]: bKingTableMid[i][j];
+                cur_score += 1000000*weight;
                 break;
             }
         }
         if((now_piece=opp_board[i][j])){
+          double weight=1;
             switch (now_piece){
               case 1:
-                cur_score -= 20*3;
                 weight -= (player==1)? wPawnTable[i][j]: bPawnTable[i][j];
+                cur_score -= 180*weight;
                 break;
               case 2:
-                cur_score -= 60*2;
-                weight -= (player==1)? wRookTable[i][j]: bRookTable[i][j];
+                weight *= (player==1)? wRookTable[i][j]: bRookTable[i][j];
+                cur_score -= 280*weight;
                 break;
               case 3:
-                cur_score -= 70*2;
                 weight -= (player==1)? wKnightTable[i][j]: bKnightTable[i][j];
+                cur_score -= 300*weight;
                 break;
               case 4:
-                cur_score -= 80*2;
                 weight -= (player==1)? wBishopTable[i][j]: bBishopTable[i][j];
+                cur_score -= 320*weight;
                 break;
               case 5:
-                cur_score -= 200*2;
                 weight -= (player==1)? wQueenTable[i][j]: bQueenTable[i][j];
+                cur_score -= 800*weight;
                 break;
               case 6:
-                cur_score -= 100000;
                 weight -= (player==1)? wKingTableMid[i][j]: bKingTableMid[i][j];
+                cur_score -= 1000000*weight;
+
                 break;
             }
           }
         }
       }
-    return cur_score+weight;
+    return cur_score;
 }
 
 
-*/
+/*
 
 static const int material_table[7] = {0, 2, 6, 7, 8, 20, 100};
 int State::evaluate(int self){
@@ -110,7 +111,7 @@ int State::evaluate(int self){
   Val = selfVal-oppnVal;
   return Val;
 }
-
+*/
 
 /**
  * @brief return next state after the move

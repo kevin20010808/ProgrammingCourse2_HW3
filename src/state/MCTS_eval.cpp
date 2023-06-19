@@ -7,11 +7,15 @@
 #include "./state.hpp"
 #include "../config.hpp"
 #include "./MCTS_eval.hpp"
+
+
 MCTS_node::MCTS_node(State* s){
     state = s;
     parent = nullptr;
+    player = s->player;
     //pa_action; 
     results[1] = 0;
+    results[0] = 0;
     results[-1] = 0;
     untried_acts = this->untried();
 }
@@ -21,13 +25,14 @@ MCTS_node::MCTS_node(State* s, MCTS_node* pa){
     parent = pa;
         //pa_action = pact;
     results[1] = 0;
+    results[0] = 0;
     results[-1] = 0;
     untried_acts = this->untried();
 }
 
 std::vector<Move> MCTS_node::untried(){
-    //if(!this->state->legal_actions.size()) 
-    this->state->get_legal_actions();
+    if(!this->state->legal_actions.size()) 
+        this->state->get_legal_actions();
     this->untried_acts = this->state->legal_actions;
     return this->untried_acts;
 };
@@ -51,13 +56,18 @@ bool MCTS_node::is_terminal_node(){return this->state->is_game_over();};
 double MCTS_node::rollout(){
     State* cur_rollout_state = this->state;
     while(!cur_rollout_state->is_game_over()){
-        //if(!cur_rollout_state->legal_actions.size()) 
-        cur_rollout_state->get_legal_actions();
+        if(!cur_rollout_state->legal_actions.size()) 
+            cur_rollout_state->get_legal_actions();
         std::vector<Move> possible_moves = cur_rollout_state->legal_actions;
         Move m = this->rollout_policy(possible_moves);
         cur_rollout_state = cur_rollout_state->next_state(m);
     }
-    return cur_rollout_state->evaluate(cur_rollout_state->player);
+    if(cur_rollout_state->player==this->player){
+        if(cur_rollout_state->game_state==WIN) return 1;
+        else return 0;
+    }
+    if(cur_rollout_state->game_state==WIN) return -1;
+    else return 0;
 };
 
 void MCTS_node::backpropagate(double result){
@@ -79,8 +89,7 @@ MCTS_node* MCTS_node::best_child(double c_param=0.1){
 };
 
 Move MCTS_node::rollout_policy(std::vector<Move> possible_moves){
-    int x = rand() % (possible_moves.size()-1);
-    return possible_moves[x];
+    return possible_moves[rand()%(possible_moves.size())];
 };
 
 MCTS_node* MCTS_node::tree_policy(){
@@ -102,7 +111,7 @@ MCTS_node* MCTS_node::best_act(){
         double reward = v->rollout();
         v->backpropagate(reward);
     }
-    return this->best_child(0.1);
+    return this->best_child(2);
 };
 
 

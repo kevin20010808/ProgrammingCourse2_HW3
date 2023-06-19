@@ -9,6 +9,7 @@
 class MCTS_node{
 public:
     State* state; 
+    int player;
     MCTS_node* parent;
     //Move pa_action;
     std::vector<MCTS_node*> children;

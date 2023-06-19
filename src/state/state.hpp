@@ -54,7 +54,7 @@ class State{
     State(Board board): board(board){};
     State(Board board, int player): board(board), player(player){};
     bool is_game_over();
-    int evaluate(int player);
+    double evaluate(int player);
     State* next_state(Move move);
     void get_legal_actions();
     std::string encode_output();
