@@ -11,6 +11,6 @@ public:
   static Move get_move(State *state, int depth);
 };
 
-int minimax(State* s, int depth, bool turn, int alpha, int beta, int player);
-int alphabeta(State *state, int depth, int alpha, int beta, bool self);
+int alphabeta(State* s, int depth, bool turn, int alpha, int beta, int player);
+int minimax(State* s, int depth, bool turn,int player);
 int negamax(State* s, int depth, int gamma, int player);

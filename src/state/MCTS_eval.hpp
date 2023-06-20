@@ -9,7 +9,6 @@
 class MCTS_node{
 public:
     State* state; 
-    int player;
     MCTS_node* parent;
     //Move pa_action;
     std::vector<MCTS_node*> children;
@@ -24,13 +23,13 @@ public:
     double n();
     MCTS_node* expand();
     bool is_terminal_node();
-    double rollout();
-    void backpropagate(double result);
+    double rollout(int player);
+    void backpropagate(int result);
     bool is_fully_expanded();
     MCTS_node* best_child(double c_param);
     Move rollout_policy(std::vector<Move> possible_moves);
     MCTS_node* tree_policy();
-    MCTS_node* best_act();
+    MCTS_node* best_act(int player);
 
 
 };

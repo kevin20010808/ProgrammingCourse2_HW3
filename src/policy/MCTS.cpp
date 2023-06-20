@@ -14,7 +14,7 @@
  */
 Move MCTS::get_move(State *state){
     MCTS_node*  root = new MCTS_node(state);
-    MCTS_node* selected_node = root->best_act();
+    MCTS_node* selected_node = root->best_act(state->player);
     return selected_node->state->move;
     //return actions[(rand()+depth)%actions.size()];
 }

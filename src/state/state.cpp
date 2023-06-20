@@ -13,7 +13,8 @@
  * @return int 
  */
 bool State::is_game_over(){
-  return  this->game_state==WIN||this->game_state==DRAW;
+  return (!this->legal_actions.size())||this->game_state==DRAW||this->game_state==WIN;
+  //return  this->game_state==WIN||this->game_state==DRAW;
 }
 double State::evaluate(int player){
   // [TODO] design your own evaluation function

@@ -12,11 +12,11 @@
 MCTS_node::MCTS_node(State* s){
     state = s;
     parent = nullptr;
-    player = s->player;
     //pa_action; 
     results[1] = 0;
     results[0] = 0;
     results[-1] = 0;
+    visit_num = 0;
     untried_acts = this->untried();
 }
 
@@ -27,6 +27,7 @@ MCTS_node::MCTS_node(State* s, MCTS_node* pa){
     results[1] = 0;
     results[0] = 0;
     results[-1] = 0;
+    visit_num = 0;
     untried_acts = this->untried();
 }
 
@@ -37,7 +38,7 @@ std::vector<Move> MCTS_node::untried(){
     return this->untried_acts;
 };
 
-double MCTS_node::q(){return this->results[1] - this->results[-1];};
+double MCTS_node::q(){return 1.5*this->results[1] - this->results[-1];};
 
 double MCTS_node::n(){return this->visit_num;};
 
@@ -53,16 +54,18 @@ MCTS_node* MCTS_node::expand(){
 
 bool MCTS_node::is_terminal_node(){return this->state->is_game_over();};
 
-double MCTS_node::rollout(){
+double MCTS_node::rollout(int player){
     State* cur_rollout_state = this->state;
+    if(!cur_rollout_state->legal_actions.size()) 
+        cur_rollout_state->get_legal_actions();
     while(!cur_rollout_state->is_game_over()){
+        Move m = this->rollout_policy(cur_rollout_state->legal_actions);
+        cur_rollout_state = cur_rollout_state->next_state(m);
         if(!cur_rollout_state->legal_actions.size()) 
             cur_rollout_state->get_legal_actions();
-        std::vector<Move> possible_moves = cur_rollout_state->legal_actions;
-        Move m = this->rollout_policy(possible_moves);
-        cur_rollout_state = cur_rollout_state->next_state(m);
     }
-    if(cur_rollout_state->player==this->player){
+    
+    if(cur_rollout_state->player==player){
         if(cur_rollout_state->game_state==WIN) return 1;
         else return 0;
     }
@@ -70,7 +73,7 @@ double MCTS_node::rollout(){
     else return 0;
 };
 
-void MCTS_node::backpropagate(double result){
+void MCTS_node::backpropagate(int result){
     this->visit_num++;
     this->results[result]++;
     if(this->parent) this->parent->backpropagate(result);
@@ -78,10 +81,10 @@ void MCTS_node::backpropagate(double result){
 
 bool MCTS_node::is_fully_expanded(){return untried_acts.size()==0;};
 
-MCTS_node* MCTS_node::best_child(double c_param=0.1){
+MCTS_node* MCTS_node::best_child(double c_param=1.7){
     std::vector<double> choices_weights;
     for(auto c:this->children){
-        double d = (c->q() / c->n()) + c_param * sqrt((2 * log(this->n()) / c->n()));
+        double d = (c->q() / c->n()) + c_param * sqrt((log10(this->n()) / c->n()));
         choices_weights.push_back(d);
     }
     int idx = max_element(choices_weights.begin(),choices_weights.end())-choices_weights.begin();
@@ -104,14 +107,16 @@ MCTS_node* MCTS_node::tree_policy(){
     return cur;
 };
 
-MCTS_node* MCTS_node::best_act(){
-    int depth = 800000;
-    for(int i=0;i<depth;i++){
+MCTS_node* MCTS_node::best_act(int player){
+    int depth = 100000;
+    while(depth--){
         MCTS_node* v = this->tree_policy();
-        double reward = v->rollout();
+        double reward = v->rollout(player);
         v->backpropagate(reward);
     }
-    return this->best_child(2);
+
+    return this->best_child(1);
+    
 };
 
 
